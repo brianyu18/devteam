@@ -1,5 +1,5 @@
 ---
-description: LEAD mode — full team orchestration. Subsumes the toolbox router. Classifies a task, dispatches specialists, funnels questions, reports.
+description: LEAD mode — full team orchestration. Classifies a task, dispatches specialists, funnels questions, reports.
 ---
 
 The user invoked `/lead` with: $ARGUMENTS
