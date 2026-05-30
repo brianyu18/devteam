@@ -56,7 +56,6 @@ These were surfaced during plan-eng-review but deferred from v1.0.0 implementati
 - [ ] Internal templates location: inline in LEAD skill body vs separate `templates/` files.
 - [ ] Detail file cleanup policy in `slack-detail/`: archive alongside slack rotations vs separate retention.
 - [ ] Memory write format from REFLECTOR: match existing auto-memory format.
-- [ ] Idempotent `/lead-abort` behavior when nothing's running.
 - [ ] `/lead-show-entry <id>` falling back to archived slack files.
 - [ ] Default project slug auto-derivation when user doesn't set one.
 - [ ] Argument parsing rules: flags before task string vs anywhere.
