@@ -1,9 +1,13 @@
 {
-  "_comment": "devteam SessionStart hook — surfaces project status when entering a repo with .devteam/state/. Activated by /lead-setup which writes this entry to ~/.claude/settings.json. Rename to hooks.json to enable plugin-local activation (rarely needed; settings-level registration is the standard path).",
+  "_comment": "devteam hooks — SessionStart surfaces project status + save suggestion; Stop runs save-autosave (change-based) and save-reminder (commit nag); SessionEnd runs save-autosave as the final backstop. Activated via /lead-setup which writes these entries to ~/.claude/settings.json. Rename to hooks.json to enable plugin-local activation (rarely needed; settings-level registration is the standard path).",
   "SessionStart": [
-    {
-      "type": "command",
-      "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh"
-    }
+    { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh" }
+  ],
+  "Stop": [
+    { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/save-autosave.sh" },
+    { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/save-reminder.sh", "timeout": 5 }
+  ],
+  "SessionEnd": [
+    { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/save-autosave.sh" }
   ]
 }
