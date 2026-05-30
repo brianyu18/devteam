@@ -1,5 +1,5 @@
 ---
-description: One-time devteam setup — registers the SessionStart hook in ~/.claude/settings.json, seeds the conventions library to ~/.claude/devteam/conventions/ from the bundled conventions-seed/, and verifies plugin dependencies. Idempotent — safe to run repeatedly.
+description: One-time devteam setup — registers SessionStart, Stop, and SessionEnd hooks in ~/.claude/settings.json, seeds the conventions library to ~/.claude/devteam/conventions/, creates the saves/ directory, and verifies plugin dependencies. Idempotent.
 ---
 
 The user invoked `/lead-setup` with: $ARGUMENTS
@@ -14,26 +14,32 @@ The user invoked `/lead-setup` with: $ARGUMENTS
    - `~/.claude/devteam/memory/`
    - `~/.claude/devteam/conventions/`
    - `~/.claude/devteam/projects/`
+   - `~/.claude/devteam/saves/`
 
 4. **Seed conventions library.** If `~/.claude/devteam/conventions/index.json` does NOT exist, copy contents of `$PLUGIN_PATH/conventions-seed/` to `~/.claude/devteam/conventions/`. If `index.json` already exists: print `[lead-setup] Conventions library exists at ~/.claude/devteam/conventions/ — no changes.` and skip — never overwrite user customizations.
 
-5. **Register SessionStart hook.** Use the `update-config` skill (or edit directly) to add an entry to `~/.claude/settings.json`:
-   ```json
-   {
-     "hooks": {
-       "SessionStart": [
-         {
-           "type": "command",
-           "command": "$PLUGIN_PATH/hooks/session-start.sh"
-         }
-       ]
-     }
-   }
-   ```
-   If the entry is already present (exact path match): print `[lead-setup] Hook already registered.` and skip.
+5. **Register hooks.** Use the `update-config` skill (or edit directly) to add entries to `~/.claude/settings.json`. Each entry should be checked for exact-path-match before adding (idempotent):
 
-6. **Ensure bin scripts are executable.** `chmod +x $PLUGIN_PATH/bin/*.sh` (idempotent).
+   **SessionStart:**
+   ```json
+   { "type": "command", "command": "$PLUGIN_PATH/hooks/session-start.sh" }
+   ```
+
+   **Stop (two entries):**
+   ```json
+   { "type": "command", "command": "$PLUGIN_PATH/hooks/save-autosave.sh" }
+   { "type": "command", "command": "$PLUGIN_PATH/hooks/save-reminder.sh", "timeout": 5 }
+   ```
+
+   **SessionEnd:**
+   ```json
+   { "type": "command", "command": "$PLUGIN_PATH/hooks/save-autosave.sh" }
+   ```
+
+   For each entry: if already present (exact path match) → print `[lead-setup] Hook already registered: <event> <name>` and skip.
+
+6. **Ensure scripts are executable.** `chmod +x $PLUGIN_PATH/bin/*.sh $PLUGIN_PATH/hooks/*.sh` (idempotent).
 
 7. **Report.** Print one line per step: `OK` / `SKIPPED` / `WARN`. Final line:
    - First-run: `[lead-setup] Setup complete. Run /lead <task> to start your first project.`
-   - Idempotent re-run with no changes: `[lead-setup] Hook already registered. Conventions library exists at ~/.claude/devteam/conventions/ — no changes.` (matches T15 validation expected output exactly.)
+   - Idempotent re-run with no changes: `[lead-setup] All hooks already registered. Conventions library exists at ~/.claude/devteam/conventions/ — no changes.`
