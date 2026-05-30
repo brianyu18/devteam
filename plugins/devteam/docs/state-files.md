@@ -42,3 +42,4 @@ LEAD and specialists read/write these files. This document is the contract.
 | `conventions/index.json` | Detection signals → convention file paths |
 | `conventions/<domain>/<stack>.md` | Per-stack guidance loaded by BUILDER briefs |
 | `projects/<slug>-<date>.md` | Archived completed project |
+| `saves/<slug>/latest.md` | Written by `/save` skill + `save-autosave.sh` hook. Current curated session save (overwritten each save). Layered: optional `latest-decisions.md` sidecar; rolling `history/` (10 retained); permanent `named/`. |
