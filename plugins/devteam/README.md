@@ -293,9 +293,9 @@ On user confirmation after a project completes, LEAD archives the full slack to 
 | `/lead [task]` | Invoke LEAD. Full team orchestration. |
 | `/lead-status` | Show current project state, last phase, mode. Read-only. |
 | `/lead-mode <name>` | Set autonomy mode persistently. `work-together` or `autonomous`. |
-| `/lead-abort` | Clean stop. Preserves state for resume. |
-| `/lead-resume` | Continue from pause or `WAITING ON USER` block. |
 | `/lead-show-slack [phase] [--decisions]` | Read team slack with optional filters. |
+| `/save [name?]` | Capture session state as a curated savepoint at `~/.claude/devteam/saves/<slug>/`. Optional `<name>` pins to `named/<name>.md`. |
+| `/continue [arg?]` | Resume from a savepoint. Forms: `latest` (default), `list` (menu), `<name>` (named/history lookup), `--with-decisions` (load sidecar). |
 | `/lead-setup` | One-time setup: register SessionStart hook + seed conventions library. |
 
 ### Specialist commands (direct mode)

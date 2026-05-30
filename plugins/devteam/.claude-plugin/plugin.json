@@ -1,6 +1,6 @@
 {
   "name": "devteam",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Multi-agent dev team in a box. LEAD orchestrates THINK / PLAN / BUILD / REVIEW / TEST / SHIP / REFLECT phases via specialist subagents with parallel fan-out, structured handoffs, and a team slack audit log.",
   "author": { "name": "Brian Yu" },
   "repository": "https://github.com/brianyu18/devteam",

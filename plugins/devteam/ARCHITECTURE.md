@@ -118,6 +118,8 @@ This is simpler and more reliable than trying to maintain persistent agent state
 
 Cross-session memory is handled separately via `~/.claude/devteam/memory/` (REFLECTOR appends lessons; LEAD reads at startup) and conventions library (BUILDER auto-loads stack conventions from `~/.claude/devteam/conventions/`).
 
+**Cross-session resume** is handled by `/save` and `/continue` (added in 1.1.0). Saves live at `~/.claude/devteam/saves/<slug>/` — the third leg of the global-tier persistence (alongside `memory/` lessons and `conventions/` stack guidance). Saves are layered (minimal `latest.md` + optional `latest-decisions.md` sidecar) with enforced size caps and rolling 10-entry history per project. A change-based Stop autosave hook protects against crashes between explicit saves.
+
 ---
 
 ## Per-tier phase subsets
@@ -157,6 +159,8 @@ Hard rules (destructive actions always confirm; twice-failed always escalates) a
 **LLM-judgment watchlist signals.** Proposed signals like "user corrected LEAD's classification" required detecting user intent from natural language — inherently unreliable. All surviving signals are mechanical (schema validation failure, flag presence, user-initiated write). If a need emerges for behavioral signals, prefer adding exact-string match patterns over intent detection.
 
 **Cross-session memory for subagents.** Tempting but deferred. The implementation complexity (persisting context, invalidating stale context, format compatibility across model versions) is high. The artifact-backed model is sufficient for v1 and covers the common case (BUILDER reads plan, writes code, done). Revisit if the 20%-context-reconstruction threshold in TODOS.md is hit.
+
+**`/lead-resume` and `/lead-abort` as separate commands.** Both were narrowly scoped: `/lead-resume` only handled the WAITING-ON-USER block case; `/lead-abort` only set a `.last-phase=aborted` marker no one consumed. Once `/save` + `/continue` arrived in 1.1.0, both became redundant — `/continue` surfaces pending blocks automatically, and `/save` IS the abort artifact (you save state and walk away). Removed in 1.1.0.
 
 ---
 

@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.1.0 — 2026-05-30 — Save/continue session state management
+
+### Added
+- `/save [name?]` — capture session state as a curated savepoint at `~/.claude/devteam/saves/<slug>/latest.md` with optional decisions sidecar. Layered design (~1500 tokens main + ~3000 tokens sidecar on demand), enforced size caps, rolling 10-entry history, named save slots.
+- `/continue [name|latest|list?]` — resume from a savepoint; subsumes the prior `/lead-resume` by surfacing any pending `WAITING ON USER` block and offering to answer it inline.
+- `hooks/save-autosave.sh` — Stop + SessionEnd hook with change-based gating (writes only when git HEAD or slack mtime changes) and 10-minute clobber protection against fresh explicit saves. Prints `📦 autosaved` on write.
+- `hooks/save-reminder.sh` — Stop hook mirroring handoff's pattern: nags once per session when commits land without a `/save` since `.last-explicit` marker.
+- `hooks/session-start.sh` — extended to surface existing saves on session entry (`📌 Save exists for this project ...`).
+
+### Removed
+- `/lead-resume` — functionality folded into `/continue` (which auto-surfaces pending blocks).
+- `/lead-abort` — functionality folded into `/save` (saving is the gravestone; no consumer left for `.last-phase=aborted`).
+
+### Changed
+- `/lead-setup` now registers Stop and SessionEnd hooks in addition to SessionStart. Existing setups remain idempotent — re-running picks up the new hook registrations.
+- `.claude-plugin/plugin.json` version bumped 1.0.1 → 1.1.0.
+
+### Migration notes
+- Existing devteam users: run `/lead-setup` to register the new hooks (idempotent).
+- claude-sync users on `/handoff` and `/continue-work`: those still work; deprecation lands in claude-sync after a 2-week / 15-session validation period with the new devteam commands (Phase 4).
+
 ## 1.0.1 — 2026-04-28 — Per-agent model selection
 
 ### Added
