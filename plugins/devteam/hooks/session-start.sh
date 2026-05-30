@@ -24,9 +24,10 @@ if [ -f "$SAVE_FILE" ]; then
   NAME=$(awk -F': ' '/^name:/ {print $2; exit}' "$SAVE_FILE" 2>/dev/null || echo "")
   DESC=$(awk -F': ' '/^description:/ {sub(/^description: /, ""); print; exit}' "$SAVE_FILE" 2>/dev/null || echo "")
   SAVED_AT=$(awk -F': ' '/^saved_at:/ {print $2; exit}' "$SAVE_FILE" 2>/dev/null || echo "")
-  # Best-effort relative time
+  # Best-effort relative time. Force UTC parsing — BSD `date -j -f` ignores the
+  # Z suffix and would parse as local time, producing negative deltas.
   if [ -n "$SAVED_AT" ]; then
-    SAVED_EPOCH=$(date -j -f "%Y-%m-%dT%H:%M:%SZ" "$SAVED_AT" "+%s" 2>/dev/null || date -d "$SAVED_AT" "+%s" 2>/dev/null || echo "0")
+    SAVED_EPOCH=$(TZ=UTC date -j -f "%Y-%m-%dT%H:%M:%SZ" "$SAVED_AT" "+%s" 2>/dev/null || date -u -d "$SAVED_AT" "+%s" 2>/dev/null || echo "0")
     if [ "$SAVED_EPOCH" -gt 0 ]; then
       DELTA=$(( $(date +%s) - SAVED_EPOCH ))
       if [ "$DELTA" -lt 3600 ]; then

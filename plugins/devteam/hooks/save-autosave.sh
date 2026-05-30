@@ -25,8 +25,10 @@ if [ -f "$DIR/latest.md" ]; then
   SAVED_BY=$(awk -F': ' '/^saved_by:/ {print $2; exit}' "$DIR/latest.md" 2>/dev/null || echo "")
   SAVED_AT=$(awk -F': ' '/^saved_at:/ {print $2; exit}' "$DIR/latest.md" 2>/dev/null || echo "")
   if [ "$SAVED_BY" = "explicit" ] && [ -n "$SAVED_AT" ]; then
-    # Convert ISO-8601 to epoch (best-effort; BSD/GNU date differ)
-    SAVED_EPOCH=$(date -j -f "%Y-%m-%dT%H:%M:%SZ" "$SAVED_AT" "+%s" 2>/dev/null || date -d "$SAVED_AT" "+%s" 2>/dev/null || echo "0")
+    # Convert ISO-8601 UTC ("...Z") to epoch. BSD `date -j -f` ignores the Z
+    # suffix and parses as local time, so force UTC via TZ=UTC. GNU `date -d`
+    # already handles Z correctly; use -u for explicit UTC interpretation.
+    SAVED_EPOCH=$(TZ=UTC date -j -f "%Y-%m-%dT%H:%M:%SZ" "$SAVED_AT" "+%s" 2>/dev/null || date -u -d "$SAVED_AT" "+%s" 2>/dev/null || echo "0")
     if [ "$SAVED_EPOCH" -gt 0 ]; then
       AGE=$(( $(date +%s) - SAVED_EPOCH ))
       if [ "$AGE" -lt 600 ]; then
