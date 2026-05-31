@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.2.0 — 2026-05-30 — Rename /save → /checkpoint (BREAKING)
+
+### Changed (BREAKING)
+- `/save` command renamed to `/checkpoint` to match conventional naming intuition: `/checkpoint` reads as "one of many recovery points per session," which matches devteam's per-cwd rolling-history function. The name `/save` is reserved for the singular canonical project state, which lives at the user/brain layer (in a personal Obsidian vault).
+- Storage path `~/.claude/devteam/saves/` → `~/.claude/devteam/checkpoints/`.
+- Hook scripts: `save-autosave.sh` → `checkpoint-autosave.sh`, `save-reminder.sh` → `checkpoint-reminder.sh`.
+- Env var override: `DEVTEAM_SAVES_HOME` → `DEVTEAM_CHECKPOINTS_HOME`.
+
+### Migration for upgraders
+1. After installing 1.2.0: `mv ~/.claude/devteam/saves ~/.claude/devteam/checkpoints` (one command — preserves all existing content).
+2. Re-run `/lead-setup` to register the renamed hook paths in `~/.claude/settings.json`. The setup is idempotent; old `save-*.sh` hook entries should be removed manually if present.
+3. Existing `latest.md` frontmatter fields (`saved_at`, `saved_by`) are unchanged — these are generic timestamp fields, not skill names.
+
+### Why this rename
+Devteam's `/save` and the user's personal cross-tool memory layer (brain vault) BOTH wanted the `/save` name. Conventional intuition resolves the conflict: "save" is the singular canonical state (brain layer), "checkpoint" is one of many per-session recovery points (devteam layer). This rename makes the two layers coexist cleanly.
+
 ## 1.1.0 — 2026-05-30 — Save/continue session state management
 
 ### Added

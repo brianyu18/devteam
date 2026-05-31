@@ -294,7 +294,7 @@ On user confirmation after a project completes, LEAD archives the full slack to 
 | `/lead-status` | Show current project state, last phase, mode. Read-only. |
 | `/lead-mode <name>` | Set autonomy mode persistently. `work-together` or `autonomous`. |
 | `/lead-show-slack [phase] [--decisions]` | Read team slack with optional filters. |
-| `/save [name?]` | Capture session state as a curated savepoint at `~/.claude/devteam/saves/<slug>/`. Optional `<name>` pins to `named/<name>.md`. |
+| `/checkpoint [name?]` | Per-session recovery checkpoint at `~/.claude/devteam/checkpoints/<slug>/`. Optional `<name>` pins to `named/<name>.md`. Rolling history of 10 + named slots. Companion to `/continue`. |
 | `/continue [arg?]` | Resume from a savepoint. Forms: `latest` (default), `list` (menu), `<name>` (named/history lookup), `--with-decisions` (load sidecar). |
 | `/lead-setup` | One-time setup: register SessionStart hook + seed conventions library. |
 
@@ -333,6 +333,22 @@ All route to `/lead` with the appropriate `--tier` flag. Will be removed in 2.0.
 | `--no-state` | Ephemeral run — no slack or state writes (direct mode only) |
 | `--from <phase>` | Resume from a specific phase; validates prerequisites |
 | `--dry-run` | Print dispatch intent without executing |
+
+---
+
+## How `/checkpoint` relates to brain `/save`
+
+devteam's `/checkpoint` and the brain layer's `/save` (in a personal Obsidian vault — see [shared-brain](#)) are complementary, not redundant. Pick by intent:
+
+| Use `/checkpoint` (devteam) when… | Use `/save` (brain) when… |
+|---|---|
+| You want a recovery point in *this* session (many per session) | You want to update the project's canonical state (one per project lifecycle) |
+| Need rolling history + crash insurance | Need cross-machine, cross-tool source of truth |
+| Local to this machine | Synced via vault + Drive to all your devices and AI tools |
+| Public devteam users — anyone with the plugin has this | Personal (requires your shared-brain vault setup) |
+| "Stash this attempt, I might try another" | "Update where this project is, across my whole life" |
+
+If you have both layers set up, `/fullsave` (a user-personal skill in claude-sync) invokes `/checkpoint` + `/save` + `/log` together at natural end-of-session moments.
 
 ---
 

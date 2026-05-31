@@ -1,5 +1,5 @@
 ---
-description: One-time devteam setup — registers SessionStart, Stop, and SessionEnd hooks in ~/.claude/settings.json, seeds the conventions library to ~/.claude/devteam/conventions/, creates the saves/ directory, and verifies plugin dependencies. Idempotent.
+description: One-time devteam setup — registers SessionStart, Stop, and SessionEnd hooks in ~/.claude/settings.json, seeds the conventions library to ~/.claude/devteam/conventions/, creates the checkpoints/ directory, and verifies plugin dependencies. Idempotent.
 ---
 
 The user invoked `/lead-setup` with: $ARGUMENTS
@@ -14,7 +14,7 @@ The user invoked `/lead-setup` with: $ARGUMENTS
    - `~/.claude/devteam/memory/`
    - `~/.claude/devteam/conventions/`
    - `~/.claude/devteam/projects/`
-   - `~/.claude/devteam/saves/`
+   - `~/.claude/devteam/checkpoints/`
 
 4. **Seed conventions library.** If `~/.claude/devteam/conventions/index.json` does NOT exist, copy contents of `$PLUGIN_PATH/conventions-seed/` to `~/.claude/devteam/conventions/`. If `index.json` already exists: print `[lead-setup] Conventions library exists at ~/.claude/devteam/conventions/ — no changes.` and skip — never overwrite user customizations.
 
@@ -27,13 +27,13 @@ The user invoked `/lead-setup` with: $ARGUMENTS
 
    **Stop (two entries):**
    ```json
-   { "type": "command", "command": "$PLUGIN_PATH/hooks/save-autosave.sh" }
-   { "type": "command", "command": "$PLUGIN_PATH/hooks/save-reminder.sh", "timeout": 5 }
+   { "type": "command", "command": "$PLUGIN_PATH/hooks/checkpoint-autosave.sh" }
+   { "type": "command", "command": "$PLUGIN_PATH/hooks/checkpoint-reminder.sh", "timeout": 5 }
    ```
 
    **SessionEnd:**
    ```json
-   { "type": "command", "command": "$PLUGIN_PATH/hooks/save-autosave.sh" }
+   { "type": "command", "command": "$PLUGIN_PATH/hooks/checkpoint-autosave.sh" }
    ```
 
    For each entry: if already present (exact path match) → print `[lead-setup] Hook already registered: <event> <name>` and skip.

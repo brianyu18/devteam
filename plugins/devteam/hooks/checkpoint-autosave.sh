@@ -1,15 +1,15 @@
 #!/bin/sh
 # Stop + SessionEnd hook. Change-based gating: only writes if disk state changed
-# since last autosave. Respects 10-min grace window on explicit saves so a fresh
-# curated save is not clobbered by a thin autosave.
+# since last autosave. Respects 10-min grace window on explicit /checkpoint so a
+# fresh curated checkpoint is not clobbered by a thin autosave.
 #
 # Overrides for testing:
-#   DEVTEAM_SAVES_HOME — override default ~/.claude/devteam/saves
+#   DEVTEAM_CHECKPOINTS_HOME — override default ~/.claude/devteam/checkpoints
 set -eu
 
-SAVES_HOME="${DEVTEAM_SAVES_HOME:-$HOME/.claude/devteam/saves}"
+CHECKPOINTS_HOME="${DEVTEAM_CHECKPOINTS_HOME:-$HOME/.claude/devteam/checkpoints}"
 SLUG=$(pwd | sed 's|/|-|g')
-DIR="$SAVES_HOME/$SLUG"
+DIR="$CHECKPOINTS_HOME/$SLUG"
 mkdir -p "$DIR/history" "$DIR/named"
 
 # 1. Change-based gating
@@ -32,7 +32,7 @@ if [ -f "$DIR/latest.md" ]; then
     if [ "$SAVED_EPOCH" -gt 0 ]; then
       AGE=$(( $(date +%s) - SAVED_EPOCH ))
       if [ "$AGE" -lt 600 ]; then
-        exit 0  # fresh curated save — do not clobber
+        exit 0  # fresh curated checkpoint — do not clobber
       fi
     fi
   fi
@@ -54,7 +54,7 @@ TMP="$DIR/.latest.md.tmp"
   echo ""
   echo "# Autosaved snapshot"
   echo ""
-  echo "_Lightweight crash-safety snapshot. Run /save for a curated save._"
+  echo "_Lightweight crash-safety snapshot. Run /checkpoint for a curated checkpoint._"
   echo ""
   if [ -f .devteam/state/slack.md ]; then
     echo "## Recent slack"

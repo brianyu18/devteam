@@ -1,19 +1,19 @@
 ---
-name: save
-description: Use to capture the current session's state to disk as a savepoint, so a future session can resume with minimal context loss. Invoked directly via /save [name?], or self-invoked when the model detects user intent to end the session ("wrapping up", "have to go", etc.) after asking the user for consent.
+name: checkpoint
+description: Use to capture the current session's state to disk as a checkpoint, so a future session can resume with minimal context loss. Invoked directly via /checkpoint [name?], or self-invoked when the model detects user intent to end the session ("wrapping up", "have to go", etc.) after asking the user for consent.
 ---
 
-# SAVE
+# CHECKPOINT
 
-You own the SAVE action. Capture the current session's state into a curated savepoint at `~/.claude/devteam/saves/<slug>/`.
+You own the CHECKPOINT action. Capture the current session's state into a curated checkpoint at `~/.claude/devteam/checkpoints/<slug>/`.
 
 ## When to invoke
 
-- User typed `/save` (explicit)
-- User typed `/save <name>` (explicit with override name)
-- You detected end-of-session intent in conversation ("wrapping up", "have to go", "talk later", "let's continue tomorrow", "see you", "good night", "lunch break", "EOD", "done for today") AND user confirmed via "Want me to save before you go? [Y/n]" → yes
+- User typed `/checkpoint` (explicit)
+- User typed `/checkpoint <name>` (explicit with override name)
+- You detected end-of-session intent in conversation ("wrapping up", "have to go", "talk later", "let's continue tomorrow", "see you", "good night", "lunch break", "EOD", "done for today") AND user confirmed via "Want me to checkpoint before you go? [Y/n]" → yes
 
-Never auto-save silently on intent. Always ask first.
+Never auto-checkpoint silently on intent. Always ask first.
 
 ## Inputs
 
@@ -27,7 +27,7 @@ Never auto-save silently on intent. Always ask first.
 1. **Resolve paths.**
    ```sh
    SLUG=$(pwd | sed 's|/|-|g')
-   DIR="$HOME/.claude/devteam/saves/$SLUG"
+   DIR="$HOME/.claude/devteam/checkpoints/$SLUG"
    mkdir -p "$DIR/history" "$DIR/named"
    ```
 
@@ -71,25 +71,25 @@ Never auto-save silently on intent. Always ask first.
    mv "$DIR/.latest-decisions.md.tmp" "$DIR/latest-decisions.md"
    ```
 
-9. **Touch `.last-explicit` marker** (consumed by save-reminder.sh):
+9. **Touch `.last-explicit` marker** (consumed by checkpoint-reminder.sh):
    ```sh
    date +%s > "$DIR/.last-explicit"
    ```
 
 10. **If `.devteam/state/` exists**, append a SUMMARY entry to slack:
     ```sh
-    "$PLUGIN_PATH/bin/slack-append.sh" "[SAVE#] INFO  savepoint written: <name>"
+    "$PLUGIN_PATH/bin/slack-append.sh" "[CHECKPOINT#] INFO  checkpoint written: <name>"
     ```
 
 11. **Report to user:**
     ```
-    SAVE WRITTEN
-    ════════════
+    CHECKPOINT WRITTEN
+    ══════════════════
     Project:    <project>
     Name:       <name>
     Latest:     <path> (<token-count> tokens)
     Decisions:  +N (sidecar written, K tokens)   # only if has_decisions
-    History:    N saves retained
+    History:    N checkpoints retained
     ```
 
 ## Frontmatter contract
