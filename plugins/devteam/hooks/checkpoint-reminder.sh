@@ -1,16 +1,16 @@
 #!/bin/sh
 # Stop hook. Nags user once per session if commits have landed since their last
-# explicit /save. Silent when:
-#   - No .last-explicit marker (user has never saved here)
+# explicit /checkpoint. Silent when:
+#   - No .last-explicit marker (user has never checkpointed here)
 #   - No commits since last-explicit
 #   - Already nagged this session (rate-limit via CLAUDE_SESSION_ID marker)
 #
 # Mirrors handoff's stop-reminder.sh pattern.
 set -u
 
-SAVES_HOME="${DEVTEAM_SAVES_HOME:-$HOME/.claude/devteam/saves}"
+CHECKPOINTS_HOME="${DEVTEAM_CHECKPOINTS_HOME:-$HOME/.claude/devteam/checkpoints}"
 SLUG=$(pwd | sed 's|/|-|g')
-DIR="$SAVES_HOME/$SLUG"
+DIR="$CHECKPOINTS_HOME/$SLUG"
 
 # Silent if no last-explicit marker
 [ -f "$DIR/.last-explicit" ] || exit 0
@@ -37,5 +37,5 @@ touch "$MARKER" 2>/dev/null || true
 # Clean stale markers (>24h)
 find "$MARKER_DIR" -maxdepth 1 -name 'nagged-*' -mmin +1440 -delete 2>/dev/null || true
 
-echo "ℹ /save reminder: $COMMITS_SINCE commit(s) landed since last save. Run /save to capture context."
+echo "ℹ /checkpoint reminder: $COMMITS_SINCE commit(s) landed since last checkpoint. Run /checkpoint to capture context."
 exit 0

@@ -1,24 +1,24 @@
 #!/bin/sh
-# Smoke test for save-autosave.sh
+# Smoke test for checkpoint-autosave.sh
 # Covers: write on first run, change-based skip on no-op turn, clobber protection
-# of fresh explicit save (within 10min).
+# of fresh explicit checkpoint (within 10min).
 set -eu
 
 TMPROOT=$(mktemp -d)
-export DEVTEAM_SAVES_HOME="$TMPROOT/saves"
-export HOME="$TMPROOT/home"  # isolate from real ~/.claude/devteam/saves
-mkdir -p "$DEVTEAM_SAVES_HOME" "$HOME/.claude/devteam/saves"
+export DEVTEAM_CHECKPOINTS_HOME="$TMPROOT/checkpoints"
+export HOME="$TMPROOT/home"  # isolate from real ~/.claude/devteam/checkpoints
+mkdir -p "$DEVTEAM_CHECKPOINTS_HOME" "$HOME/.claude/devteam/checkpoints"
 cd "$TMPROOT"
 
 # Minimal fake git repo so `git rev-parse HEAD` returns something stable
 git init -q .
 git -c user.email=t@t -c user.name=t commit --allow-empty -q -m "seed"
 
-HELPER="$OLDPWD/plugins/devteam/hooks/save-autosave.sh"
+HELPER="$OLDPWD/plugins/devteam/hooks/checkpoint-autosave.sh"
 [ -x "$HELPER" ] || { echo "FAIL: hook not executable: $HELPER"; exit 1; }
 
 SLUG=$(echo "$TMPROOT" | sed 's|/|-|g')
-DIR="$DEVTEAM_SAVES_HOME/$SLUG"
+DIR="$DEVTEAM_CHECKPOINTS_HOME/$SLUG"
 
 # 1. First run writes latest.md
 "$HELPER" || { echo "FAIL: first run errored"; exit 1; }
@@ -32,7 +32,7 @@ sleep 1
 MTIME2=$(stat -f %m "$DIR/latest.md" 2>/dev/null || stat -c %Y "$DIR/latest.md")
 [ "$MTIME1" = "$MTIME2" ] || { echo "FAIL: change-based gating did not skip no-op turn"; exit 1; }
 
-# 3. Clobber protection: explicit save within 10min → autosave skips
+# 3. Clobber protection: explicit checkpoint within 10min → autosave skips
 NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 cat > "$DIR/latest.md" <<EOF
 ---
@@ -46,8 +46,8 @@ EOF
 # Force a state change so autosave WOULD run if not for clobber rule
 git -c user.email=t@t -c user.name=t commit --allow-empty -q -m "trigger change"
 "$HELPER" || { echo "FAIL: third run errored"; exit 1; }
-grep -q "saved_by: explicit" "$DIR/latest.md" || { echo "FAIL: clobber protection failed — explicit save was overwritten"; exit 1; }
-grep -q "Manual content" "$DIR/latest.md" || { echo "FAIL: explicit save body was overwritten"; exit 1; }
+grep -q "saved_by: explicit" "$DIR/latest.md" || { echo "FAIL: clobber protection failed — checkpoint was overwritten"; exit 1; }
+grep -q "Manual content" "$DIR/latest.md" || { echo "FAIL: checkpoint body was overwritten"; exit 1; }
 
-echo "OK: all save-autosave smoke tests passed"
+echo "OK: all checkpoint-autosave smoke tests passed"
 rm -rf "$TMPROOT"

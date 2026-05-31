@@ -4,9 +4,9 @@
 set -eu
 
 STATE_DIR="${PWD}/.devteam/state"
-SAVES_HOME="${DEVTEAM_SAVES_HOME:-$HOME/.claude/devteam/saves}"
+CHECKPOINTS_HOME="${DEVTEAM_CHECKPOINTS_HOME:-$HOME/.claude/devteam/checkpoints}"
 SLUG=$(pwd | sed 's|/|-|g')
-SAVE_FILE="$SAVES_HOME/$SLUG/latest.md"
+SAVE_FILE="$CHECKPOINTS_HOME/$SLUG/latest.md"
 
 # Part 1 — devteam project status (existing behavior)
 if [ -d "$STATE_DIR" ]; then
@@ -19,7 +19,7 @@ if [ -d "$STATE_DIR" ]; then
 EOF
 fi
 
-# Part 2 — save suggestion (new)
+# Part 2 — checkpoint suggestion (new)
 if [ -f "$SAVE_FILE" ]; then
   NAME=$(awk -F': ' '/^name:/ {print $2; exit}' "$SAVE_FILE" 2>/dev/null || echo "")
   DESC=$(awk -F': ' '/^description:/ {sub(/^description: /, ""); print; exit}' "$SAVE_FILE" 2>/dev/null || echo "")
@@ -44,6 +44,6 @@ if [ -f "$SAVE_FILE" ]; then
     REL="unknown time"
   fi
   LABEL="${DESC:-$NAME}"
-  LABEL="${LABEL:-unnamed save}"
-  echo "📌 Save exists for this project ($REL): \"$LABEL\". Run /continue to load."
+  LABEL="${LABEL:-unnamed checkpoint}"
+  echo "📌 Checkpoint exists for this project ($REL): \"$LABEL\". Run /continue to load."
 fi
