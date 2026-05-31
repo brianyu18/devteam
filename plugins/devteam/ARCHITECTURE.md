@@ -118,7 +118,9 @@ This is simpler and more reliable than trying to maintain persistent agent state
 
 Cross-session memory is handled separately via `~/.claude/devteam/memory/` (REFLECTOR appends lessons; LEAD reads at startup) and conventions library (BUILDER auto-loads stack conventions from `~/.claude/devteam/conventions/`).
 
-**Cross-session resume** is handled by `/save` and `/continue` (added in 1.1.0). Saves live at `~/.claude/devteam/saves/<slug>/` — the third leg of the global-tier persistence (alongside `memory/` lessons and `conventions/` stack guidance). Saves are layered (minimal `latest.md` + optional `latest-decisions.md` sidecar) with enforced size caps and rolling 10-entry history per project. A change-based Stop autosave hook protects against crashes between explicit saves.
+**Cross-session recovery** is handled by `/checkpoint` (renamed from `/save` in 1.2.0) and `/continue`. Checkpoints live at `~/.claude/devteam/checkpoints/<slug>/` — the third leg of the global-tier persistence (alongside `memory/` lessons and `conventions/` stack guidance). Checkpoints are layered (minimal `latest.md` + optional `latest-decisions.md` sidecar) with enforced size caps and rolling 10-entry history per project. A change-based Stop autosave hook protects against crashes between explicit checkpoints.
+
+This is the *tool-layer* recovery mechanism — machine-local, per-cwd, public. Complementary to a separate *user-layer* mechanism that may exist in user-personal vaults (e.g., a brain vault). The user-layer `/save` writes a single canonical project state to the vault; the tool-layer `/checkpoint` writes rolling per-session recovery points to local devteam storage. Different audiences, different durability, different cardinality.
 
 ---
 
@@ -161,6 +163,8 @@ Hard rules (destructive actions always confirm; twice-failed always escalates) a
 **Cross-session memory for subagents.** Tempting but deferred. The implementation complexity (persisting context, invalidating stale context, format compatibility across model versions) is high. The artifact-backed model is sufficient for v1 and covers the common case (BUILDER reads plan, writes code, done). Revisit if the 20%-context-reconstruction threshold in TODOS.md is hit.
 
 **`/lead-resume` and `/lead-abort` as separate commands.** Both were narrowly scoped: `/lead-resume` only handled the WAITING-ON-USER block case; `/lead-abort` only set a `.last-phase=aborted` marker no one consumed. Once `/save` + `/continue` arrived in 1.1.0, both became redundant — `/continue` surfaces pending blocks automatically, and `/save` IS the abort artifact (you save state and walk away). Removed in 1.1.0.
+
+**`/save` as the devteam command name.** Shipped in 1.1.0 as `/save`. Renamed to `/checkpoint` in 1.2.0 (breaking) because the name `/save` is more intuitive for the singular canonical state — which is what a user-personal brain/vault layer naturally owns. Devteam's actual function (many recovery points per session, rolling history, machine-local) matches "checkpoint" better. Conventional intuition wins over the original choice.
 
 ---
 
