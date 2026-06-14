@@ -309,6 +309,7 @@ On user confirmation after a project completes, LEAD archives the full slack to 
 | `/test [layer]` | TESTER | Run one test layer |
 | `/ship-project` | SHIPPER | Renamed to avoid gstack `/ship` collision |
 | `/reflect` | REFLECTOR | Direct REFLECT phase |
+| `/council [question]` | Council skill | Convene a panel (investigators + pro/con advocates + reviewers + synthesizer) to pressure-test a question, decision, or proposal and return one reasoned verdict. Deliberates; does not build. Ephemeral by default. |
 
 ### Deprecated aliases (toolbox 0.1.0 backward compat)
 

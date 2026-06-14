@@ -184,3 +184,24 @@ Hard rules (destructive actions always confirm; twice-failed always escalates) a
 | Understand state file layout | `docs/state-files.md` |
 | Understand question-packet contract | `docs/question-packet.md`, `docs/question-packet-schema.json` |
 | Understand mode behavior | `docs/modes.md` |
+
+---
+
+## Why the council is a skill, not an agent
+
+The council needs to dispatch many specialists in parallel and merge their output. The natural instinct is to make "COUNCIL" an agent. It cannot be — for the same reason there are no lead-agents (see "Why no lead agents"): **subagents in Claude Code cannot dispatch nested subagents.** A Task-tool agent runs in a fresh context with no Task tool. Only code in the main thread (a skill) can dispatch.
+
+So `council` is a skill, like `lead`. It runs in the main thread, chairs the panel, and is the only actor that calls Task.
+
+---
+
+## Why the council roster is not its label names
+
+The user-facing ask was "4 critics (2 pro, 2 con), 2 investigators, 2 reviewers." The roles were mapped to the agents whose system prompts actually do that job, not to the agents whose names match:
+
+- **Con** = `critic` (built to find reasons not to proceed; con-only by design).
+- **Pro** = `explorer` briefed "argue FOR" (built to make the strongest case for an assigned angle — the real advocate).
+- **Evidence** = `investigator`, kept strictly **neutral**; its value is a shared, unbiased fact base both sides cite. It is never assigned a side.
+- **Reviewers** = adaptive: `review-specialist` lenses when a diff is present, the new `reasoning-reviewer` (fallacy/assumption audit) when the subject is abstract.
+- The optional **divergent** seat is also an `explorer`, briefed to reframe and surface new options — the user's "explore new options" intuition, expressed as a different brief to the same agent.
+- The `synthesizer` is **mandatory** here (it produces the verdict, which is the council's whole reason to exist).
