@@ -38,7 +38,7 @@ If the reasoning is sound, say so — but look hard first.
 ```json
 {
   "status": "complete",
-  "phase": "COUNCIL",
+  "phase": "THINK",
   "summary": "Reasoning review: <N> findings (<CRITICAL>/<MAJOR>/<MINOR>)",
   "artifacts": [],
   "next_phase_ready": true,

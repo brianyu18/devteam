@@ -54,7 +54,7 @@ Dispatch in ONE Task message, all fed the Wave-1 evidence:
 - 2× `explorer` — brief: "Argue FOR <proposition>. Cite the evidence base. Two distinct pro angles: <angle A>, <angle B>."
 - 2× `critic` — brief: "Find the strongest reasons NOT to proceed with <proposition>. Cite the evidence base."
 - 2× scrutiny:
-  - **code-mode** → `review-specialist`, lenses from `bin/devteam-pick-lenses.sh`, passing each lens spec path `agents/review-lenses/<lens>.md` and the resolved model (per lens frontmatter).
+  - **code-mode** → `review-specialist`, lenses from `bin/devteam-pick-lenses.sh` — dispatch one per lens returned (typically 2–3, not strictly 2; same behaviour as LEAD's REVIEW phase), passing each lens spec path `agents/review-lenses/<lens>.md` and the resolved model (per lens frontmatter).
   - **abstract-mode** → `reasoning-reviewer`, brief: the proposition + the evidence base + the pro/con angles to audit.
 - optional 1× `explorer` (divergent) — brief: "Set aside the for/against framing. Surface options or reframings nobody has proposed for: <proposition>."
 
