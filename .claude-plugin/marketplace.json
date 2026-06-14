@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "devteam",
-      "version": "1.2.0",
+      "version": "1.3.0",
       "description": "Multi-agent dev team. LEAD skill orchestrates phases via specialists; structured handoffs and team-slack audit log.",
       "source": "./plugins/devteam"
     }

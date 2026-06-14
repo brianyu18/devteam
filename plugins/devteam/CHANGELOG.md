@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.0 — 2026-06-13 — /council deliberation skill
+
+### Added
+- **`/council`** — convene a deliberation council that pressure-tests a question, decision, or proposal and returns one reasoned verdict. Reuses existing specialists (2 neutral `investigator`s, 2 `explorer`s arguing FOR, 2 `critic`s arguing AGAINST, 2 adaptive reviewers, 1 mandatory `synthesizer`), plus an optional divergent `explorer`.
+- **`reasoning-reviewer` agent** — read-only reviewer of argument quality (logical fallacies, unstated assumptions, evidence gaps, internal inconsistency). Used as the council's abstract-mode reviewer seat.
+
+### Notes
+- Council is ephemeral by default (runnable from any repo or none); it logs to `.devteam/state/` only when that directory already exists.
+- Backward compatible — no existing agent, skill, command, or state file changed.
+
 ## 1.2.0 — 2026-05-30 — Rename /save → /checkpoint (BREAKING)
 
 ### Changed (BREAKING)
