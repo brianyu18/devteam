@@ -12,7 +12,7 @@ The user invoked `/startup` with: $ARGUMENTS
    - `--no-images` — force presto `--nogen` (skip all paid image generation).
    - `--notify` / `--no-notify` — PushNotification on a stranded gate (default on).
    - `--goal-file <path>` — read the goal brief from a file.
-   - Everything not a flag is the goal. If the goal is empty and no `--goal-file` is given, ask the user what to build and stop.
+   - Everything not a flag is the goal. If the goal is empty and no `--goal-file` is given, do NOT stop — the `startup` skill runs its §0.5 INTAKE step to co-author a goal (short Q&A, with an opt-in `council --lite` deferral when unsure) and write `GOAL.md`.
 2. Resolve the plugin install path: read `.devteam/state/.plugin-path` if present, else use `${CLAUDE_PLUGIN_ROOT}` and write it (create `.devteam/state/` if needed).
 3. Invoke the `startup` skill with the goal, the parsed flags, and the resolved plugin path.
 4. The `startup` skill handles: the contract (one approval), the autonomous phase loop, council-lite decisions, the escalation gates, interrupt/steering, and the ship-boundary stop.
