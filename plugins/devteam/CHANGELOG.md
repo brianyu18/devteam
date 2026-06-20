@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.4.0 — 2026-06-19 — /startup autopilot + frontend-specialist
+
+### Added
+- **`/startup`** — autonomous project autopilot. Takes a goal, approves a one-screen CONTRACT (via `council --lite`), then drives THINK→DESIGN→PLAN→BUILD→REVIEW→TEST in autonomous mode, deciding via council-lite and tapping you only on escalation gates (breaking, monetary, security, token-budget, destructive). Stops at the ship boundary. Interrupt anytime (message or `.devteam/control` file) to inject decisions, redirect, or stop.
+- **`frontend-specialist` agent** — UI/frontend builder subagent that embodies presto's taste skills (emil-design-eng, impeccable, imagen-direction) and consumes DESIGN-phase artifacts. Dispatchable by both `/lead` and `/startup` for UI partitions.
+- **presto integration** — when a goal is UI/presentation work, startup runs a main-thread DESIGN phase (presto `/magic`) before BUILD and a `/design-audit` at REVIEW. presto is an optional dependency.
+
+### Notes
+- Token budgeting is a dispatch-count proxy (default 40 dispatches / fan-out 4), not real token metering.
+- Every presto image-generation batch (paid Gemini API) hits the monetary gate.
+- Backward compatible — no existing agent, skill, command, or state file changed (only `dispatch-recipes.md` gained an additive UI-partition note).
+
 ## 1.3.0 — 2026-06-13 — /council deliberation skill
 
 ### Added

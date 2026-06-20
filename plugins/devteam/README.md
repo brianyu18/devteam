@@ -111,6 +111,7 @@ Any specialist can be invoked standalone for ad-hoc use without booting the whol
 | CRITIC | `agents/critic.md` | Adversarial critique — finds flaws in a draft |
 | SYNTHESIZER | `agents/synthesizer.md` | Merges N inputs into one coherent output |
 | INVESTIGATOR | `agents/investigator.md` | Read-only research — finds usage, explains code |
+| frontend-specialist | `agents/frontend-specialist.md` | UI/frontend builder subagent (presto taste; consumes DESIGN artifacts). Dispatched by `/lead` and `/startup` for UI partitions. |
 
 ### Review lenses (6) — loaded by review-specialist
 
@@ -310,6 +311,7 @@ On user confirmation after a project completes, LEAD archives the full slack to 
 | `/ship-project` | SHIPPER | Renamed to avoid gstack `/ship` collision |
 | `/reflect` | REFLECTOR | Direct REFLECT phase |
 | `/council [question]` | Council skill | Convene a panel (investigators + pro/con advocates + reviewers + synthesizer) to pressure-test a question, decision, or proposal and return one reasoned verdict. Deliberates; does not build. Ephemeral by default. |
+| `/startup [goal]` | Startup skill | Autonomous project autopilot — council-lite decisions, escalation-gate interrupts only, stops at ship boundary. |
 
 ### Deprecated aliases (toolbox 0.1.0 backward compat)
 

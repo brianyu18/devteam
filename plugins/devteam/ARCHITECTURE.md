@@ -205,3 +205,15 @@ The user-facing ask was "4 critics (2 pro, 2 con), 2 investigators, 2 reviewers.
 - **Reviewers** = adaptive: `review-specialist` lenses when a diff is present, the new `reasoning-reviewer` (fallacy/assumption audit) when the subject is abstract.
 - The optional **divergent** seat is also an `explorer`, briefed to reframe and surface new options — the user's "explore new options" intuition, expressed as a different brief to the same agent.
 - The `synthesizer` is **mandatory** here (it produces the verdict, which is the council's whole reason to exist).
+
+---
+
+## Why startup is its own orchestrator (not a mode of lead)
+
+`startup` could have been a flag on `lead`. It is a separate skill instead, for the same nesting reason lead-agents were removed: the autopilot must dispatch specialists AND invoke skills (`council`, presto `magic`) from the main thread, and it carries policy LEAD does not have (a contract, a dispatch budget, escalation gates, an interrupt/control-file loop). Bolting that into `lead` would make every `lead` run carry autopilot branches. Instead `startup` is a sibling that REUSES lead's phase recipes by reference (`dispatch-recipes.md` is shared data) and adds only its control loop. Net: zero changes to `lead/SKILL.md`.
+
+---
+
+## Why UI work splits across the nesting boundary
+
+presto's creative pipeline (`/magic` phases, the `/houdini` DRAFT fan-out, `/design-audit`'s parallel barrier, and paid image generation) all dispatch or fan out — so they MUST run in the main thread. presto's taste *knowledge* (`emil-design-eng`, `impeccable` rules, `imagen-direction`) is embeddable. So startup runs the creative DESIGN phase at the main-thread level and produces artifacts (`tokens.css`, `DESIGN_APPROACH.md`), then fans out `frontend-specialist` subagents that EMBODY the taste knowledge and CONSUME those artifacts to implement UI. A subagent never invokes `/magic` — it can't fan out. This is the same constraint that makes the council and startup skills (not agents).
