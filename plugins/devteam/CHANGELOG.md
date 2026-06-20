@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.4.1 — 2026-06-20 — /startup guided goal-intake
+
+### Added
+- **Goal-intake for bare `/startup`.** Invoking `/startup` with no goal (and no `--goal-file`) no longer dead-ends — it runs a short main-thread Q&A that co-authors a goal, with an opt-in `council --lite` deferral ("I'm not sure — help me shape it") that proposes 1–3 candidate goal directions from your answers + repo/vault context. The assembled goal is written to `GOAL.md`, then flows into the existing CONTRACT phase.
+
+### Notes
+- Default Q&A path costs 0 dispatches; the unsure→council-lite path costs ~5 (counted toward the budget, opt-in).
+- No change when a goal IS provided (inline or `--goal-file`). Backward compatible.
+
 ## 1.4.0 — 2026-06-19 — /startup autopilot + frontend-specialist
 
 ### Added

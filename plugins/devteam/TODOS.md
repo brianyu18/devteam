@@ -8,7 +8,7 @@ Format: `- [ ] <title> — <one-line context>` followed by **Trigger:** when to 
 
 ## Tier 1 — likely to surface within 2-4 weeks of usage
 
-- [ ] **1.4.1 — `/startup` guided goal-intake.** Bare `/startup` (no goal, no `--goal-file`) currently just asks "what do you want to build?" and stops. Replace with a short guided intake — a couple of questions or a `council --lite` drafting pass — that co-authors the goal, optionally writing it to `GOAL.md`, then proceeds to the contract.
+- [x] **1.4.1 — `/startup` guided goal-intake.** Bare `/startup` (no goal, no `--goal-file`) currently just asks "what do you want to build?" and stops. Replace with a short guided intake — a couple of questions or a `council --lite` drafting pass — that co-authors the goal, optionally writing it to `GOAL.md`, then proceeds to the contract. _(shipped 1.4.1, 2026-06-20)_
   **Trigger:** after the first onlypaws `/startup` smoke test (2026-06-20). Brian requested this explicitly.
 
 - [ ] **Distribution CI/CD pipeline for devteam itself.** Currently ship via manual `git tag` + GitHub release + marketplace re-publish.
