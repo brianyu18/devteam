@@ -321,7 +321,7 @@ On user confirmation after a project completes, LEAD archives the full slack to 
 
 1. **Inline (normal):** `/devteam:startup add a dark-mode toggle to the settings page`. Best for well-scoped goals.
 2. **`--goal-file <path>`:** `/devteam:startup --goal-file GOAL.md`. For rich, multi-part briefs you want committed to the repo and reusable across `/continue`.
-3. **Bare `/startup`:** prompts for what to build. *(Planned 1.4.1: a guided goal-intake that drafts the goal for you here.)*
+3. **Bare `/startup`:** runs a guided **goal-intake** — a short Q&A (with an "I'm not sure → `council --lite` proposes options" escape) that co-authors the goal, writes it to `GOAL.md`, then proceeds into the contract. (1.4.1+)
 
 Whatever you pass, the **CONTRACT phase refines it** (via `council --lite`) into concrete success criteria + phase plan + dispatch budget before anything runs — so a rough one-liner is enough; you approve the sharpened version. The same "loose task string is fine" rule applies to `/lead` and the direct phase commands.
 
