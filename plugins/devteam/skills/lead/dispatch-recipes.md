@@ -35,6 +35,14 @@ Per-tier phase subsets and brief composition rules.
 - SHIP: full sequence; chain `gstack:/document-release` after merge.
 - REFLECT: full retro; include WATCHLIST analyzer output.
 
+## UI partitions
+
+For partitions whose `paths` are UI/frontend (components, pages, styles, design system):
+
+- Dispatch `frontend-specialist` (not `builder`). Its brief additionally includes the DESIGN-phase artifact paths (`tokens.css`, `DESIGN_APPROACH.md`, `DIALS.json` if present) and the presto taste-skill paths to read (`skills/{emil-design-eng,impeccable,imagen-direction}/SKILL.md` under the presto install path).
+- If presto is installed and the work is design-heavy, an optional main-thread DESIGN step (`/magic`) can run before BUILD to produce those artifacts. The DESIGN step runs in the main thread (it fans out / generates images); a `frontend-specialist` subagent must never invoke `/magic`, `/houdini`, or `/design-audit`.
+- Image generation (presto nanogen → paid Gemini API) is a main-thread, monetary-gated action; workers do not call it.
+
 ## Brief composition (every dispatch)
 
 LEAD includes in every worker brief:
