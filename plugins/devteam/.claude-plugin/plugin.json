@@ -1,6 +1,6 @@
 {
   "name": "devteam",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Multi-agent dev team in a box. LEAD orchestrates THINK / PLAN / BUILD / REVIEW / TEST / SHIP / REFLECT phases via specialist subagents with parallel fan-out, structured handoffs, and a team slack audit log.",
   "author": { "name": "Brian Yu" },
   "repository": "https://github.com/brianyu18/devteam",
@@ -9,7 +9,8 @@
   "requires": {
     "plugins": [
       { "name": "superpowers", "marketplace": "claude-plugins-official", "min_version": "5.0.0" },
-      { "name": "gstack", "marketplace": "any", "optional": false }
+      { "name": "gstack", "marketplace": "any", "optional": false },
+      { "name": "presto", "marketplace": "any", "optional": true }
     ]
   }
 }
