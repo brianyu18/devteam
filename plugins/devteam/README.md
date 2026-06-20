@@ -285,7 +285,7 @@ On user confirmation after a project completes, LEAD archives the full slack to 
 
 ## Command Reference
 
-19 commands total (7 LEAD-management + 7 specialists + 5 deprecated aliases).
+21 commands total (7 LEAD-management + 9 specialists + 5 deprecated aliases).
 
 ### LEAD management
 
@@ -313,6 +313,18 @@ On user confirmation after a project completes, LEAD archives the full slack to 
 | `/council [question]` | Council skill | Convene a panel (investigators + pro/con advocates + reviewers + synthesizer) to pressure-test a question, decision, or proposal and return one reasoned verdict. Deliberates; does not build. Ephemeral by default. |
 | `/startup [goal]` | Startup skill | Autonomous project autopilot — council-lite decisions, escalation-gate interrupts only, stops at ship boundary. |
 
+### Invocation & providing a goal
+
+**Invocation.** These are devteam plugin commands. Invoke bare (`/startup`, `/council`, `/lead`) when the name is unambiguous; if it collides with another plugin, or to be explicit, use the namespaced form: **`/devteam:startup`**, `/devteam:council`, etc.
+
+**Giving `/startup` (or `/lead`) a goal — you do NOT pre-author a spec.** Three ways:
+
+1. **Inline (normal):** `/devteam:startup add a dark-mode toggle to the settings page`. Best for well-scoped goals.
+2. **`--goal-file <path>`:** `/devteam:startup --goal-file GOAL.md`. For rich, multi-part briefs you want committed to the repo and reusable across `/continue`.
+3. **Bare `/startup`:** prompts for what to build. *(Planned 1.4.1: a guided goal-intake that drafts the goal for you here.)*
+
+Whatever you pass, the **CONTRACT phase refines it** (via `council --lite`) into concrete success criteria + phase plan + dispatch budget before anything runs — so a rough one-liner is enough; you approve the sharpened version. The same "loose task string is fine" rule applies to `/lead` and the direct phase commands.
+
 ### Deprecated aliases (toolbox 0.1.0 backward compat)
 
 All route to `/lead` with the appropriate `--tier` flag. Will be removed in 2.0.0.
@@ -336,6 +348,13 @@ All route to `/lead` with the appropriate `--tier` flag. Will be removed in 2.0.
 | `--no-state` | Ephemeral run — no slack or state writes (direct mode only) |
 | `--from <phase>` | Resume from a specific phase; validates prerequisites |
 | `--dry-run` | Print dispatch intent without executing |
+| `--budget <N>` | (`/startup`) Max subagent dispatches this run (default 40) |
+| `--fanout <K>` | (`/startup`) Max parallel subagents per wave (default 4) — controls concurrency, NOT image count (set images in the goal) |
+| `--ship` | (`/startup`) Allow the SHIP phase to run (push/deploy still confirms) |
+| `--no-images` | (`/startup`) Skip presto paid image generation |
+| `--goal-file <path>` | (`/startup`) Read the goal brief from a file |
+| `--lite` | (`/council`) Trim the council roster to a cheaper 5-agent panel |
+| `--model <name>` | (`/lead`, `/council`) Override worker model: `sonnet` / `opus` / `haiku` |
 
 ---
 
