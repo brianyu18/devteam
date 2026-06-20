@@ -18,9 +18,30 @@ Read this whole skill before acting. The run is governed by a CONTRACT the user 
 - Write `.devteam/state/.startup` policy file (one `key=value` per line: `budget`, `fanout`, `ship_boundary`, `images`, `notify`).
 - Dependency check (read `~/.claude/plugins/installed_plugins.json`): `superpowers` REQUIRED (refuse if missing); `gstack` soft; `presto` soft — if absent, the DESIGN phase will be skipped with a warning.
 
+## 0.5 INTAKE (only when no goal was provided)
+
+If the command handed you **no goal string AND no `--goal-file`**, do NOT stop — run goal-intake to co-author one. (If a goal WAS provided, skip this entire section and go to §1.)
+
+### Q&A (default — 0 dispatches)
+Ask the user in ONE short round (use `AskUserQuestion` for the choice questions, prose for the open ones — do not interrogate):
+
+1. **What are you building?** (one sentence). Offer an explicit escape option: **"I'm not sure — help me shape it."**
+2. **Project type?** — web app / mobile app / CLI / API / library / other.
+3. **Hard constraints?** (stack, must / must-not, deadline) — optional.
+4. **Scope of this first run?** — the whole thing / a foundational slice / a specific feature.
+
+### Unsure → council-lite deferral (opt-in, ~5 dispatches)
+If the user picks **"I'm not sure — help me shape it"** on Q1, OR gives empty/too-thin answers, convene `council --lite` (Skill tool) to **propose 1–3 candidate goal directions** — synthesis goal stated verbatim: "Propose 1–3 concrete goal directions for this project; do NOT verdict." Brief it with the partial answers + project context: cwd, `git` state, the repo `README`, and the vault-project `CLAUDE.md` if the cwd basename matches a vault project. Add the dispatches to `.devteam/state/.dispatch-count`. Present the candidates; the user picks one and edits it (allow one more round if asked).
+
+### Assemble + write GOAL.md
+Compose the confident answers (or the chosen candidate) into a goal brief — intent, deliverables, scope, out-of-scope, stack preference if given (the same shape as any `--goal-file`). Write it to `./GOAL.md`, echo it to the user, and note it is committed-ready. Do NOT `git commit` it here — BUILD/SHIP commit it with the rest; INTAKE stays side-effect-light. Use this goal for §1.
+
+### Hard fallback
+If the user declines even the unsure path (fully empty), ask once more; if still nothing, exit cleanly: "Give me a goal or a `--goal-file` to start." Never loop.
+
 ## 1. CONTRACT phase (the one guaranteed up-front gate)
 
-1. Convene `council --lite` (Skill tool) on the goal. Brief it to produce a CONTRACT covering: refined goal; success criteria; recommended tier + phase plan; whether a DESIGN phase is needed (is this UI/presentation work?); the escalation gates; the dispatch budget + a PROJECTED dispatch count for the plan; the ship boundary; and the top 3 risks. (This council convening counts ~5 dispatches — add them to `.dispatch-count`.)
+1. Convene `council --lite` (Skill tool) on the goal (provided by the command, or assembled in §0.5 INTAKE). Brief it to produce a CONTRACT covering: refined goal; success criteria; recommended tier + phase plan; whether a DESIGN phase is needed (is this UI/presentation work?); the escalation gates; the dispatch budget + a PROJECTED dispatch count for the plan; the ship boundary; and the top 3 risks. (This council convening counts ~5 dispatches — add them to `.dispatch-count`.)
 2. Present the CONTRACT to the user, then ask: approve / edit / cancel.
    - edit → incorporate and re-present.
    - cancel → restore the prior mode, exit.
