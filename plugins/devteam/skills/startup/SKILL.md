@@ -54,7 +54,7 @@ Phases: THINK → [DESIGN, if UI] → PLAN → BUILD → REVIEW → TEST.
 ## 3. Decider policy
 
 - Full `council --lite` (Skill) at: goal/contract framing, tier classification, architecture/spec decisions, and any specialist `blocked` packet that is genuinely consequential.
-- Cheap pre-flight (`2× explorer` + `1× critic`, per LEAD §10) for small in-phase micro-ambiguities.
+- Cheap pre-flight (`1× explorer` + `1× critic` = 2 agents, matching LEAD's §7 autonomous "Pre-flight w/ CRITIC + EXPLORER") for small in-phase micro-ambiguities.
 - Use the verdict to proceed; log `[STARTUP#] DECISION  <topic>: <choice> (council-lite)`. Never funnel a non-gate decision to the user.
 
 ## 4. Escalation gates (the ONLY things that tap the user)

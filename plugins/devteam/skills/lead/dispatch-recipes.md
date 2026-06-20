@@ -85,6 +85,7 @@ Defaults summary (per-agent frontmatter today):
 | Agent | model |
 |---|---|
 | `builder` | `sonnet` |
+| `frontend-specialist` | `sonnet` |
 | `review-specialist` | `sonnet` (lens spec may override) |
 | `tester` | `haiku` |
 | `explorer` | `sonnet` |
